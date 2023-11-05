@@ -14,7 +14,7 @@
   },
   "tauri": {
     "allowlist": {
-      "all": false,
+      "all": true,
       "http": {
         "scope": ["http://localhost:11434/*"]
       },
