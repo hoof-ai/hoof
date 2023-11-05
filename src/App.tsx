@@ -14,25 +14,25 @@ function App() {
 
   useEffect(() => {
     // Fetch the models when the component mounts
-    getOllamaModels();
-  }, []);
-
-  async function getOllamaModels() {
-    try {
-      const modelList: ModelList = await invoke('get_ollama_models');
-      setModels(modelList.models);
-      // Optionally set the first model as the selected one
-      if (modelList.models.length > 0) {
-        setSelectedModel(modelList.models[0]);
+    async function fetchModels() {
+      try {
+        const modelsList = await invoke<ModelList>('get_ollama_models');
+        setModels(modelsList.models);
+        setSelectedModel(modelsList.models[0]); // Set the first model as selected by default
+      } catch (error) {
+        console.error('Failed to fetch models:', error);
       }
-    } catch (error) {
-      console.error('Failed to get models:', error);
     }
-  }
+
+    fetchModels();
+  }, []);
 
 
   async function askOllama() {
-    const response: string = await invoke('askollama', { question });
+    const response = await invoke<string>('askollama', {
+      question,
+      models: selectedModel,
+    });
     setOllamaResponse(response);
   }
 

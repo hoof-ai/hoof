@@ -59,13 +59,15 @@ fn greet(name: &str) -> String {
 }
 
 #[tauri::command]
-async fn askollama(question: String, model_name: String) -> Result<String, ApiError> {
+async fn askollama(question: String, models: String) -> Result<String, ApiError> {
     let url = "http://localhost:11434/api/generate";
+    println!("Sending request to {}", url);
+
 
     let client = reqwest::Client::new();
     let response = client.post(url)
         .json(&serde_json::json!({
-            "model": model_name,
+            "model": models,
             "prompt": question,
             "stream": false
         }))
