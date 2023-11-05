@@ -5,6 +5,14 @@ use thiserror::Error;
 use serde_json::Value;
 use reqwest;
 use serde::ser::{Serialize, Serializer, SerializeStruct};
+use std::process::Output;
+use serde::de::Error;
+
+#[derive(Debug)]
+struct ModelList {
+    models: Vec<String>,
+}
+
 
 #[derive(Debug, Error)]
 pub enum ApiError {
@@ -12,6 +20,8 @@ pub enum ApiError {
     Network(#[from] reqwest::Error),
     #[error("Failed to parse response: {0}")]
     ParseError(#[from] serde_json::Error),
+    #[error("Command execution failed: {0}")]
+    CommandError(String),
     // Add more error types as needed
 }
 
@@ -26,6 +36,18 @@ impl Serialize for ApiError {
         state.end()
     }
 }
+impl Serialize for ModelList {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        // Start a struct serialization with one field named "models".
+        let mut state = serializer.serialize_struct("ModelList", 1)?;
+        // Serialize the `models` field.
+        state.serialize_field("models", &self.models)?;
+        state.end()
+    }
+}
 
 
 
@@ -36,11 +58,6 @@ fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
-#[tauri::command]
-fn askollama2(question: &str) -> String {
-    println!("Question, {}!", question);
-    format!("Response, {}! From Rust", question)
-}
 #[tauri::command]
 async fn askollama(question: String) -> Result<String, ApiError> {
     let url = "http://localhost:11434/api/generate";
@@ -67,10 +84,34 @@ async fn askollama(question: String) -> Result<String, ApiError> {
     Ok(final_response)
 }
 
+#[tauri::command]
+async fn get_ollama_models() -> Result<ModelList, ApiError> {
+    let output = std::process::Command::new("ollama")
+        .arg("list")
+        .output()
+        .map_err(|e| ApiError::CommandError(e.to_string()))?;
+
+    if !output.status.success() {
+        return Err(ApiError::CommandError(
+            String::from_utf8_lossy(&output.stderr).into_owned(),
+        ));
+    }
+
+    let output_str = String::from_utf8(output.stdout)
+        .map_err(|_| ApiError::ParseError(serde_json::Error::custom("Invalid UTF-8 sequence")))?;
+
+    let models = output_str
+        .lines()
+        .map(str::to_owned)
+        .collect::<Vec<String>>();
+
+    Ok(ModelList { models })
+}
+
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet, askollama])
+        .invoke_handler(tauri::generate_handler![greet, askollama, get_ollama_models])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

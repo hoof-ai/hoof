@@ -1,25 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { invoke } from '@tauri-apps/api/tauri';
 import './App.css';
 
+interface ModelList {
+  models: string[];
+}
 
 function App() {
   const [greetMsg, setGreetMsg] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [ollamaResponse, setOllamaResponse] = useState<string>('');
-  const [question, setOllamaQuestion] = useState<string>('');
+  const [question, setQuestion] = useState<string>('');
+  const [models, setModels] = useState<string[]>([]);
+  const [selectedModel, setSelectedModel] = useState<string>('');
+
+  useEffect(() => {
+    // Fetch the models when the component mounts
+    getOllamaModels();
+  }, []);
+
+  async function getOllamaModels() {
+    try {
+      const modelList: ModelList = await invoke('get_ollama_models');
+      setModels(modelList.models);
+      // Optionally set the first model as the selected one
+      if (modelList.models.length > 0) {
+        setSelectedModel(modelList.models[0]);
+      }
+    } catch (error) {
+      console.error('Failed to get models:', error);
+    }
+  }
 
   async function greet() {
-    console.log('Greet function called with name:', name);
-    const response = await invoke<string>('greet', { name });
-    console.log('Greet response:', response);
+    const response: string = await invoke('greet', { name });
     setGreetMsg(response);
   }
 
-  async function askollama() {
-    console.log('askOllama called with question:', question);
-    const response = await invoke<string>('askollama', { question });
-    console.log('Ollama response:', response);
+  async function askOllama() {
+    const response: string = await invoke('askollama', { question });
     setOllamaResponse(response);
   }
 
@@ -27,51 +46,48 @@ function App() {
     <div className="container">
       <h1>Welcome to the Ollama UI</h1>
 
-      <p>The current configuration is mistral:latest</p>
+      <p>The current configuration is {selectedModel}</p>
 
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          console.log('Greet form submitted with name:', name); // Log when greet form is submitted
-          greet();
-        }}
-      >
+      <div className="row">
         <input
           id="greet-input"
           type="text"
-          onChange={(e) => {
-            console.log('Name input changed:', e.currentTarget.value); // Log changes to the name input
-            setName(e.currentTarget.value);
-          }}
+          value={name}
+          onChange={(e) => setName(e.currentTarget.value)}
           placeholder="Enter a name..."
         />
-        <button type="submit">Greet</button>
-      </form>
+        <button onClick={greet}>Greet</button>
+      </div>
 
       <p>{greetMsg}</p>
 
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          console.log('Ollama form submitted with question:', question); // Log when ollama form is submitted
-          askollama();
-        }}
-      >
+      <div className="row">
         <input
-          id="greet-input"
+          id="question-input"
           type="text"
-          onChange={(e) => {
-            console.log('Ollama question input changed:', e.currentTarget.value); // Log changes to the ollama question input
-            setOllamaQuestion(e.currentTarget.value);
-          }}
+          value={question}
+          onChange={(e) => setQuestion(e.currentTarget.value)}
           placeholder="Ask Ollama a question..."
         />
-        <button type="submit">Ask</button>
-      </form>
+        <button onClick={askOllama}>Ask</button>
+      </div>
 
       <p>{ollamaResponse}</p>
+
+      <div className="row">
+        <label htmlFor="model-select">Choose a model:</label>
+        <select
+          id="model-select"
+          value={selectedModel}
+          onChange={(e) => setSelectedModel(e.currentTarget.value)}
+        >
+          {models.map((model, index) => (
+            <option key={index} value={model}>
+              {model}
+            </option>
+          ))}
+        </select>
+      </div>
     </div>
   );
 }
