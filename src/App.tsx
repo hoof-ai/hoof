@@ -7,7 +7,7 @@ function App() {
   const [greetMsg, setGreetMsg] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [ollamaResponse, setOllamaResponse] = useState<string>('');
-  const [ollamaQuestion, setOllamaQuestion] = useState<string>('');
+  const [question, setOllamaQuestion] = useState<string>('');
 
   async function greet() {
     console.log('Greet function called with name:', name);
@@ -16,9 +16,9 @@ function App() {
     setGreetMsg(response);
   }
 
-  async function askOllama() {
-    console.log('askOllama called with question:', ollamaQuestion);
-    const response = await invoke<string>('askollama', { ollamaQuestion });
+  async function askollama() {
+    console.log('askOllama called with question:', question);
+    const response = await invoke<string>('askollama', { question });
     console.log('Ollama response:', response);
     setOllamaResponse(response);
   }
@@ -55,12 +55,12 @@ function App() {
         className="row"
         onSubmit={(e) => {
           e.preventDefault();
-          console.log('Ollama form submitted with question:', ollamaQuestion); // Log when ollama form is submitted
-          askOllama();
+          console.log('Ollama form submitted with question:', question); // Log when ollama form is submitted
+          askollama();
         }}
       >
         <input
-          id="ollama-input"
+          id="greet-input"
           type="text"
           onChange={(e) => {
             console.log('Ollama question input changed:', e.currentTarget.value); // Log changes to the ollama question input
