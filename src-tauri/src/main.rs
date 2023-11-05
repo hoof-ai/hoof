@@ -59,13 +59,13 @@ fn greet(name: &str) -> String {
 }
 
 #[tauri::command]
-async fn askollama(question: String) -> Result<String, ApiError> {
+async fn askollama(question: String, model_name: String) -> Result<String, ApiError> {
     let url = "http://localhost:11434/api/generate";
 
     let client = reqwest::Client::new();
     let response = client.post(url)
         .json(&serde_json::json!({
-            "model": "mistral:latest",
+            "model": model_name,
             "prompt": question,
             "stream": false
         }))
@@ -100,13 +100,15 @@ async fn get_ollama_models() -> Result<ModelList, ApiError> {
     let output_str = String::from_utf8(output.stdout)
         .map_err(|_| ApiError::ParseError(serde_json::Error::custom("Invalid UTF-8 sequence")))?;
 
+    // Extract only the name part before the first tab or space
     let models = output_str
         .lines()
-        .map(str::to_owned)
+        .filter_map(|line| line.split_whitespace().next().map(str::to_owned))
         .collect::<Vec<String>>();
 
     Ok(ModelList { models })
 }
+
 
 
 fn main() {

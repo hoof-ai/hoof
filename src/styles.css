@@ -84,11 +84,7 @@ button {
   outline: none;
 }
 
-#greet-input {
-  margin-right: 5px;
-}
-
-#ollama-input {
+#question-input {
   margin-left: 5px;
 }
 

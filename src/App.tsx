@@ -7,8 +7,6 @@ interface ModelList {
 }
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState<string>('');
-  const [name, setName] = useState<string>('');
   const [ollamaResponse, setOllamaResponse] = useState<string>('');
   const [question, setQuestion] = useState<string>('');
   const [models, setModels] = useState<string[]>([]);
@@ -32,10 +30,6 @@ function App() {
     }
   }
 
-  async function greet() {
-    const response: string = await invoke('greet', { name });
-    setGreetMsg(response);
-  }
 
   async function askOllama() {
     const response: string = await invoke('askollama', { question });
@@ -48,18 +42,6 @@ function App() {
 
       <p>The current configuration is {selectedModel}</p>
 
-      <div className="row">
-        <input
-          id="greet-input"
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button onClick={greet}>Greet</button>
-      </div>
-
-      <p>{greetMsg}</p>
 
       <div className="row">
         <input
