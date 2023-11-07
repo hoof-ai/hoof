@@ -36,6 +36,7 @@ jobs:
           workspaces: tooling/bundler
 
       - name: Run cargo fmt
+        working-directory: ./src-tauri
         run: cargo fmt --manifest-path ./Cargo.toml --all -- --check
 
   lint:
@@ -79,4 +80,5 @@ jobs:
           workspaces: tooling/bundler
 
       - name: Lint with clippy
+        working-directory: ./src-tauri
         run: cargo clippy --manifest-path ./Cargo.toml --all-targets -- -D warnings
