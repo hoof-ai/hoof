@@ -1,0 +1,44 @@
+name: "Lint Github Actions Workflows"
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+    branches:
+      - main
+    paths:
+      - ".github/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read # read the git repo
+  checks: write # write check annotations
+  pull-requests: write # update pull request status and comment
+  issues: write # write issue comments
+  actions: read # read workflow files
+
+# One build per branch, cancel out of date builds
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-actions-workflows:
+    name: Lint Actions Workflows
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: reviewdog/action-actionlint@v1
+        with:
+          fail_on_error: true
+          level: error
+          reporter: github-pr-review
+          filter_mode: file
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SHELLCHECK_OPTS: "-e SC2086 -e SC2129 -e SC1091 -e SC2050 -e SC2194 -e SC2154 -e SC2157"

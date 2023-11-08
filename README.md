@@ -1,7 +1,44 @@
-# Tauri + React + Typescript
+# Rusty Ollama
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+A native desktop app for [Ollama](https://ollama.ai) built with [Tauri](https://tauri.studio).
 
-## Recommended IDE Setup
+_🐉 Here be dragons! This project is in early stages of development_
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+## Install
+
+Clone and at the root run
+
+```shell
+pnpm install
+```
+
+## Run
+
+### Dev
+
+```shell
+pnpm tauri dev
+```
+
+### Build for production
+
+```shell
+pnpm tauri build
+```
+
+## Authors
+
+- Dax @Dax911
+- Sam @sammcj
+
+## Contributing
+
+Contributions and ideas are welcome, please open an issue or submit a PR.
+
+Contributors:
+
+- Your name here!
+
+## License
+
+- [LICENSE-MIT](LICENSE-MIT)

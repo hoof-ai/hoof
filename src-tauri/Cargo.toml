@@ -1,9 +1,9 @@
 [package]
-name = "tauri-app"
+name = "rusty_llama"
 version = "0.0.0"
-description = "A Tauri App"
-authors = ["you"]
-license = ""
+description = "A GUI tool for interacting with local LLMs through Ollama."
+authors = ["Dax911", "Sammcj"]
+license = "MIT"
 repository = ""
 edition = "2021"
 
@@ -18,6 +18,7 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 reqwest = "0.11.22"
 tokio = "1.33.0"
+thiserror = "1.0.50"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem
