@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { invoke } from '@tauri-apps/api/tauri';
-import useEscape from './hooks/useEscape';
 
 interface ModelList {
   models: string[];
@@ -11,7 +10,6 @@ function App() {
   const [question, setQuestion] = useState<string>('');
   const [models, setModels] = useState<string[]>([]);
   const [selectedModel, setSelectedModel] = useState<string>('');
-
 
   useEffect(() => {
     // Fetch the models when the component mounts

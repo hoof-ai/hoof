@@ -4,7 +4,6 @@
     windows_subsystem = "windows"
 )]
 
-mod spotlight;
 use thiserror::Error;
 use serde_json::Value;
 use reqwest;
@@ -50,6 +49,15 @@ impl Serialize for ModelList {
         state.serialize_field("models", &self.models)?;
         state.end()
     }
+}
+
+
+
+// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
+#[tauri::command]
+fn greet(name: &str) -> String {
+    println!("Hello, {}!", name);
+    format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
 #[tauri::command]
@@ -105,21 +113,11 @@ async fn get_ollama_models() -> Result<ModelList, ApiError> {
     Ok(ModelList { models })
 }
 
+
+
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![
-            spotlight::init_spotlight_window,
-            spotlight::show_spotlight,
-            spotlight::hide_spotlight,
-            askollama,
-            get_ollama_models
-        ])
-        .manage(spotlight::State::default())
-        .setup(move |app| {
-            // Set activation poicy to Accessory to prevent the app icon from showing on the dock
-            app.set_activation_policy(tauri::ActivationPolicy::Accessory);
-            Ok(())
-        })
+        .invoke_handler(tauri::generate_handler![greet, askollama, get_ollama_models])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
