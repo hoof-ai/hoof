@@ -1,117 +1,92 @@
-// Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use reqwest::Client;
+use serde::Serialize;
+use serde_json::{json, Value};
 use thiserror::Error;
-use serde_json::Value;
-use reqwest;
-use serde::ser::{Serialize, Serializer, SerializeStruct};
-use std::process::Output;
-use serde::de::Error;
+use tauri::command; // Import the command macro for Tauri.
+use serde::ser::Error as SerdeError; // Add this to bring the `Error` trait into scope.
 
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 struct ModelList {
     models: Vec<String>,
 }
 
-
 #[derive(Debug, Error)]
 pub enum ApiError {
     #[error("Network request failed: {0}")]
-    Network(#[from] reqwest::Error),
+    Network(reqwest::Error),
     #[error("Failed to parse response: {0}")]
-    ParseError(#[from] serde_json::Error),
+    ParseError(serde_json::Error),
     #[error("Command execution failed: {0}")]
     CommandError(String),
-    // Add more error types as needed
 }
 
-impl Serialize for ApiError {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        let mut state = serializer.serialize_struct("ApiError", 2)?;
-        state.serialize_field("error", &self.to_string())?;
-        state.serialize_field("details", &format!("{:?}", self))?;
-        state.end()
-    }
-}
-impl Serialize for ModelList {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        // Start a struct serialization with one field named "models".
-        let mut state = serializer.serialize_struct("ModelList", 1)?;
-        // Serialize the `models` field.
-        state.serialize_field("models", &self.models)?;
-        state.end()
+// Implement conversion from `ApiError` to `tauri::InvokeError`.
+impl From<ApiError> for tauri::InvokeError {
+    fn from(error: ApiError) -> Self {
+        match error {
+            ApiError::Network(e) => tauri::InvokeError::from(e.to_string()), // Convert to string
+            ApiError::ParseError(e) => tauri::InvokeError::from(e.to_string()), // Convert to string
+            ApiError::CommandError(e) => tauri::InvokeError::from(e),
+        }
     }
 }
 
-
-
-// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-#[tauri::command]
+/// Greet the user with a personalized message
+#[command]
 fn greet(name: &str) -> String {
-    println!("Hello, {}!", name);
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
-#[tauri::command]
+/// Asks Ollama API with a question and model, expecting a string response
+#[command]
 async fn askollama(question: String, models: String) -> Result<String, ApiError> {
     let url = "http://localhost:11434/api/generate";
-    println!("Sending request to {}", url);
-
-
-    let client = reqwest::Client::new();
-    let response = client.post(url)
-        .json(&serde_json::json!({
+    let client = Client::new();
+    let res = client.post(url)
+        .json(&json!({
             "model": models,
             "prompt": question,
             "stream": false
         }))
         .send()
-        .await?
+        .await
+        .map_err(ApiError::Network)?
         .text()
-        .await?;
+        .await
+        .map_err(ApiError::Network)?;
 
-    let final_response = response.lines()
-        .filter_map(|line| {
-            serde_json::from_str::<Value>(line).ok()?.get("response")?.as_str().map(ToString::to_string)
-        })
+    let final_response = res.lines()
+        .filter_map(|line| serde_json::from_str::<Value>(line).ok())
+        .filter_map(|val| val.get("response")?.as_str().map(ToString::to_string))
         .collect::<Vec<String>>()
         .join("");
 
     Ok(final_response)
 }
 
-#[tauri::command]
-async fn get_ollama_models() -> Result<ModelList, ApiError> {
+/// Retrieves the list of models from Ollama API
+#[command]
+fn get_ollama_models() -> Result<ModelList, ApiError> {
     let output = std::process::Command::new("ollama")
         .arg("list")
         .output()
         .map_err(|e| ApiError::CommandError(e.to_string()))?;
 
     if !output.status.success() {
-        return Err(ApiError::CommandError(
-            String::from_utf8_lossy(&output.stderr).into_owned(),
-        ));
+        let error_message = String::from_utf8_lossy(&output.stderr).into_owned();
+        return Err(ApiError::CommandError(error_message));
     }
 
-    let output_str = String::from_utf8(output.stdout)
-        .map_err(|_| ApiError::ParseError(serde_json::Error::custom("Invalid UTF-8 sequence")))?;
-
-    // Extract only the name part before the first tab or space
-    let models = output_str
+    let models = String::from_utf8(output.stdout)
+        .map_err(|_| ApiError::ParseError(serde_json::error::Error::custom("Invalid UTF-8 sequence")))?
         .lines()
-        .filter_map(|line| line.split_whitespace().next().map(str::to_owned))
-        .collect::<Vec<String>>();
+        .filter_map(|line| line.split_whitespace().next().map(ToString::to_string))
+        .collect();
 
     Ok(ModelList { models })
 }
-
-
 
 fn main() {
     tauri::Builder::default()
