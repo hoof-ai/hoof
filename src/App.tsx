@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { invoke } from '@tauri-apps/api/tauri';
 import './App.css';
+import useEscape from "./hooks/useEscape.tsx";
 
 interface ModelList {
   models: string[];
@@ -25,6 +26,11 @@ function App() {
     }
 
     fetchModels();
+  }, []);
+
+  useEscape();
+  useEffect(() => {
+    invoke("init_spotlight_window");
   }, []);
 
 

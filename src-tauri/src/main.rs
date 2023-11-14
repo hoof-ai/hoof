@@ -5,7 +5,6 @@ use thiserror::Error;
 use serde_json::Value;
 use reqwest;
 use serde::ser::{Serialize, Serializer, SerializeStruct};
-use std::process::Output;
 use serde::de::Error;
 
 #[derive(Debug)]
@@ -27,8 +26,8 @@ pub enum ApiError {
 
 impl Serialize for ApiError {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
+        where
+            S: Serializer,
     {
         let mut state = serializer.serialize_struct("ApiError", 2)?;
         state.serialize_field("error", &self.to_string())?;
@@ -36,10 +35,11 @@ impl Serialize for ApiError {
         state.end()
     }
 }
+
 impl Serialize for ModelList {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
+        where
+            S: Serializer,
     {
         // Start a struct serialization with one field named "models".
         let mut state = serializer.serialize_struct("ModelList", 1)?;
@@ -47,15 +47,6 @@ impl Serialize for ModelList {
         state.serialize_field("models", &self.models)?;
         state.end()
     }
-}
-
-
-
-// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-#[tauri::command]
-fn greet(name: &str) -> String {
-    println!("Hello, {}!", name);
-    format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
 #[tauri::command]
@@ -111,11 +102,23 @@ async fn get_ollama_models() -> Result<ModelList, ApiError> {
     Ok(ModelList { models })
 }
 
-
+mod spotlight;
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet, askollama, get_ollama_models])
+        .invoke_handler(tauri::generate_handler![
+            spotlight::init_spotlight_window,
+            spotlight::show_spotlight,
+            spotlight::hide_spotlight,
+            askollama,
+            get_ollama_models
+        ])
+        .manage(spotlight::State::default())
+        .setup(move |app| {
+            // Set activation policy to Accessory to prevent the app icon from showing on the dock
+            app.set_activation_policy(tauri::ActivationPolicy::Accessory);
+            Ok(())
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
