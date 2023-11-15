@@ -1,3 +1,6 @@
+// Spotlight functionality taken from tauri-macos-spotlight-example
+// https://github.com/ahkohd/tauri-macos-spotlight-example/blob/main/src-tauri/src/spotlight.rs
+// Copyright 2022 Victor Aremu - MIT Licensed
 use std::sync::{Mutex, Once};
 
 use objc_id::{Id, ShareId};
