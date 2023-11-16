@@ -6,7 +6,6 @@ on:
   push:
     branches:
       - main # build and publish once merged to main
-      - ! nobuild* # don't trigger on nobuild branches
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
