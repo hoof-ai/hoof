@@ -117,9 +117,7 @@ static PANEL_LABEL: &str = "main";
 
 #[tauri::command]
 pub fn init_spotlight_window(app_handle: AppHandle<Wry>, window: Window<Wry>) {
-    println!("init_spotlight_window");
     INIT.call_once(|| {
-        println!("init_spotlight_window called once");
         set_state!(app_handle, panel, Some(create_spotlight_panel(&window)));
         register_shortcut(app_handle);
     });
@@ -132,7 +130,6 @@ fn register_shortcut(app_handle: AppHandle<Wry>) {
     let panel = panel!(app_handle);
     shortcut_manager
         .register("Cmd+k", move || {
-            println!("Shortcut Cmd+k triggered");
             position_window_at_the_center_of_the_monitor_with_cursor(&window);
 
             if panel.is_visible() {
