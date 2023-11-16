@@ -9,8 +9,8 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "tauri-app",
-    "version": "0.0.0"
+    "productName": "rusty_ollama",
+    "version": "0.0.1"
   },
   "tauri": {
     "allowlist": {
@@ -29,7 +29,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.tauri.dev",
+      "identifier": "com.rusty.ollama",
       "macOS": {
         "entitlements": null,
         "exceptionDomain": "",
