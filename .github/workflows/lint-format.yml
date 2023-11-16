@@ -3,11 +3,11 @@ name: Lint and Format
 on:
   workflow_dispatch: # manual (actions -> workflow-name -> run)
 
-  # we can enable these soon when we have osmething to CI
-  # push:
-  #   branches: [ "main" ]
-  # pull_request:
-  #   branches: [ "main" ]
+  push:
+  pull_request:
+    branches:
+      - main
+      - dev
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -42,20 +42,15 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    strategy:
-      fail-fast: false
-      matrix:
-        platform: [macos-latest, ubuntu-latest, windows-latest]
     steps:
       - uses: actions/checkout@v4
 
       - name: setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: install dependencies (linux only)
-        if: matrix.platform == 'ubuntu-latest'
+      - name: install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
