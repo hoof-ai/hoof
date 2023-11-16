@@ -20,6 +20,8 @@ env:
 permissions:
   contents: write # for tagging / releasing
   packages: write
+  issues: write
+  pull-requests: write # for releasing with a PR
 
 jobs:
   build:
