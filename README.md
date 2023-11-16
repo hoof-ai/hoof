@@ -28,8 +28,9 @@ pnpm tauri build
 
 ## Authors
 
-- Dax @Dax911
-- Sam @sammcj
+- Dax [@Dax911](https://github.com/Dax911)
+- Sam [@sammcj](https://github.com/sammcj)
+- Simon [@simoncollins](https://github.com/simoncollins)
 
 ## Contributing
 
@@ -42,3 +43,5 @@ Contributors:
 ## License
 
 - [LICENSE-MIT](LICENSE-MIT)
+- Tauri Spotlight functionality used under MIT licence from
+  [tauri-macos-spotlight-example](https://github.com/ahkohd/tauri-macos-spotlight-example)

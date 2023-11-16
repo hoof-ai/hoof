@@ -2,11 +2,12 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use reqwest::Client;
-use serde::Serialize;
 use serde_json::{json, Value};
 use thiserror::Error;
+use reqwest;
 use tauri::command; // Import the command macro for Tauri.
-use serde::ser::Error as SerdeError; // Add this to bring the `Error` trait into scope.
+use serde::ser::Error as SerdeError;
+use serde::Serialize; // Add this to bring the `Error` trait into scope.
 
 #[derive(Debug, Serialize)]
 struct ModelList {
@@ -32,12 +33,6 @@ impl From<ApiError> for tauri::InvokeError {
             ApiError::CommandError(e) => tauri::InvokeError::from(e),
         }
     }
-}
-
-/// Greet the user with a personalized message
-#[command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
 /// Asks Ollama API with a question and model, expecting a string response
@@ -89,9 +84,23 @@ fn get_ollama_models() -> Result<ModelList, ApiError> {
     Ok(ModelList { models })
 }
 
+mod spotlight;
+
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet, askollama, get_ollama_models])
+        .invoke_handler(tauri::generate_handler![
+            spotlight::init_spotlight_window,
+            spotlight::show_spotlight,
+            spotlight::hide_spotlight,
+            askollama,
+            get_ollama_models
+        ])
+        .manage(spotlight::State::default())
+        .setup(move |app| {
+            // Set activation policy to Accessory to prevent the app icon from showing on the dock
+            app.set_activation_policy(tauri::ActivationPolicy::Accessory);
+            Ok(())
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
