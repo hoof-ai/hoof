@@ -78,6 +78,8 @@ fn get_ollama_models() -> Result<ModelList, ApiError> {
     let models = String::from_utf8(output.stdout)
         .map_err(|_| ApiError::ParseError(serde_json::error::Error::custom("Invalid UTF-8 sequence")))?
         .lines()
+        // Skip the first line, which is the header
+        .skip(1)
         .filter_map(|line| line.split_whitespace().next().map(ToString::to_string))
         .collect();
 
