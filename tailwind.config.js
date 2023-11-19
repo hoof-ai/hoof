@@ -80,18 +80,6 @@ export default {
           800: "#f4baaa",
           900: "#f9ddd5",
         },
-        white_smoke: {
-          DEFAULT: "#F3F0F1",
-          100: "#362b2f",
-          200: "#6c565d",
-          300: "#9d858d",
-          400: "#c9bbc0",
-          500: "#f3f0f1",
-          600: "#f6f4f4",
-          700: "#f8f7f7",
-          800: "#faf9fa",
-          900: "#fdfcfc",
-        },
         rosy_brown: {
           DEFAULT: "#BBA19D",
           100: "#281e1c",
