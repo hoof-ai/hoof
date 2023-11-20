@@ -1,11 +1,12 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use reqwest;
 use reqwest::Client;
 use serde_json::{json, Value};
+use tauri::command;
 use thiserror::Error;
-use reqwest;
-use tauri::command; // Import the command macro for Tauri.
+// Import the command macro for Tauri.
 use serde::ser::Error as SerdeError;
 use serde::Serialize; // Add this to bring the `Error` trait into scope.
 
@@ -40,7 +41,8 @@ impl From<ApiError> for tauri::InvokeError {
 async fn askollama(question: String, models: String) -> Result<String, ApiError> {
     let url = "http://localhost:11434/api/generate";
     let client = Client::new();
-    let res = client.post(url)
+    let res = client
+        .post(url)
         .json(&json!({
             "model": models,
             "prompt": question,
@@ -53,7 +55,8 @@ async fn askollama(question: String, models: String) -> Result<String, ApiError>
         .await
         .map_err(ApiError::Network)?;
 
-    let final_response = res.lines()
+    let final_response = res
+        .lines()
         .filter_map(|line| serde_json::from_str::<Value>(line).ok())
         .filter_map(|val| val.get("response")?.as_str().map(ToString::to_string))
         .collect::<Vec<String>>()
@@ -76,8 +79,12 @@ fn get_ollama_models() -> Result<ModelList, ApiError> {
     }
 
     let models = String::from_utf8(output.stdout)
-        .map_err(|_| ApiError::ParseError(serde_json::error::Error::custom("Invalid UTF-8 sequence")))?
+        .map_err(|_| {
+            ApiError::ParseError(serde_json::error::Error::custom("Invalid UTF-8 sequence"))
+        })?
         .lines()
+        // Skip the first line, which is the header
+        .skip(1)
         .filter_map(|line| line.split_whitespace().next().map(ToString::to_string))
         .collect();
 
