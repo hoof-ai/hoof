@@ -34,7 +34,7 @@ jobs:
             platform: macos-latest
             arch: ARM64
           - os: macOS
-            platform: macos-latest
+            platform: macos-13-arm64 # https://docs.github.com/en/actions/using-github-hosted-runners/about-larger-runners/about-larger-runners#about-macos-larger-runners
             arch: x64
           # - os: Linux
           #   platform: ubuntu-latest
