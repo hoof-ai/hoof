@@ -32,8 +32,10 @@ const ResponseArea = ({}: ResponseAreaProps) => {
                         }
                         {
                             queryState === 'postQuery' && currentResponse && (
-                                <div className="overflow-y-scroll">
-                                    <Markdown remarkPlugins={[remarkGfm]}>{currentResponse}</Markdown>
+                                <div className="overflow-y-scroll p-4 bg-gray-200">
+                                    <article className="prose prose-slate">
+                                        <Markdown remarkPlugins={[remarkGfm]}>{currentResponse}</Markdown>
+                                    </article>
                                 </div>
                             )
                         }
