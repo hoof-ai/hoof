@@ -1,11 +1,13 @@
 import React, {KeyboardEvent} from 'react';
 import {useQuery} from "../hooks/useQuery.ts";
+import clsx from 'clsx';
 
 interface PromptTextAreaProps {
 }
 
 const PromptTextArea: React.FC<PromptTextAreaProps> = ({}: PromptTextAreaProps) => {
-    const { askOllama, setCurrentQuestion, currentQuestion } = useQuery();
+    const { askOllama, setCurrentQuestion, currentQuestion, queryState } = useQuery();
+
 
     const handleKeyPress = async (event: KeyboardEvent<HTMLTextAreaElement>) => {
         if (event.key === 'Enter' && !event.shiftKey) {
@@ -14,8 +16,12 @@ const PromptTextArea: React.FC<PromptTextAreaProps> = ({}: PromptTextAreaProps) 
         }
     };
 
+    const classNames = clsx('relative flex flex-col p-5', {
+        'h-full': queryState === 'preQuery' // only force the height if we're entering a prompt.
+    });
+
     return (
-        <div className="relative flex flex-col p-5 h-full"> {/* Padding and full height */}
+        <div className={classNames}>
             <textarea
                 className="flex-grow bg-gray-800 text-white p-4 resize-none overflow-y-auto"
                 value={currentQuestion}

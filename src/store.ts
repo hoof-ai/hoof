@@ -10,7 +10,7 @@ export interface State {
     currentQuestion: string;
     setCurrentQuestion: (currentQuestion: string) => void;
     currentResponse: string;
-    queryState: 'idle' | 'asking' | 'error';
+    queryState: 'preQuery' | 'asking' | 'error' | 'postQuery';
     askOllama: () => Promise<void>;
 }
 
@@ -24,7 +24,7 @@ export const useStore = create<State>((set, get) => ({
     currentQuestion: '',
     setCurrentQuestion: (currentQuestion) => set({ currentQuestion }),
     currentResponse: '',
-    queryState: 'idle',
+    queryState: 'preQuery',
     askOllama: async () => {
         try {
             const question = get().currentQuestion;
@@ -35,12 +35,11 @@ export const useStore = create<State>((set, get) => ({
                     models: get().selectedModel,
                 });
                 set({currentResponse: response});
+                set({queryState: 'postQuery'});
                 console.log('Ollama says:', response);
             } catch (e) {
                 console.error('Failed to ask Ollama:', e);
                 set({queryState: 'error'});
-            } finally {
-                set({queryState: 'idle'});
             }
         } catch (error) {
             console.error('Failed to ask Ollama:', error);
