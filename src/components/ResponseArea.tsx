@@ -1,5 +1,7 @@
 import {useQuery} from "../hooks/useQuery.ts";
 import clsx from 'clsx';
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface ResponseAreaProps {
 }
@@ -30,7 +32,9 @@ const ResponseArea = ({}: ResponseAreaProps) => {
                         }
                         {
                             queryState === 'postQuery' && currentResponse && (
-                                <div className="overflow-y-scroll">{currentResponse}</div>
+                                <div className="overflow-y-scroll">
+                                    <Markdown remarkPlugins={[remarkGfm]}>{currentResponse}</Markdown>
+                                </div>
                             )
                         }
 
