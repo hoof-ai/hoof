@@ -73,7 +73,7 @@ jobs:
     - name: Cache
       uses: Swatinem/rust-cache@v2
       with:
-        workspaces: tooling/bundler
+        workspaces: src-tauri
 
     - uses: pnpm/action-setup@v2
       name: Install pnpm
