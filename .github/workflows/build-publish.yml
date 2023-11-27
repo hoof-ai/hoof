@@ -99,7 +99,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: cargo-tauri
-        path: ./src-tauri/target/release/bundle/dmg/*.dmg
+        path: ./src-tauri/target/release/bundle/*/*.dmg
         if-no-files-found: error
 
   create-release:
@@ -123,6 +123,24 @@ jobs:
       - name: get version
         run: echo PACKAGE_VERSION="$(node -p "require('./package.json').version")" >> "$GITHUB_ENV"
 
+      # Check if release / tag already exists, if it does add a suffix to the version
+      - name: check if release exists
+        id: check-release
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: releases } = await github.rest.repos.listReleases({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            })
+            const release = releases.find(r => r.tag_name === `app-v${process.env.PACKAGE_VERSION}`)
+            return release ? release.tag_name : null
+
+      - name: set version
+        if: steps.check-release.outputs.result != null
+        run: echo PACKAGE_VERSION="$(node -p "require('./package.json').version")-$(date +%Y%m%d%H%M%S)" >> "$GITHUB_ENV"
+
+      # Create release with the tag
       - name: create release
         id: create-release
         uses: actions/github-script@v6
