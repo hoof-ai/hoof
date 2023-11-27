@@ -10,6 +10,7 @@
 
 body {
   font-family: var(--font-geist-sans);
+  max-height: 100vh;
 }
 
 html, body {

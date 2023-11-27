@@ -7,7 +7,7 @@ interface TopBarProps {
 
 const TopBar: React.FC<TopBarProps> = () => {
     return (
-        <div className="flex justify-between items-center p-5">
+        <div className="flex justify-between items-center">
             <img src="/rllama.png" alt="Logo" className="h-9 w-9 rounded-full" />
             <div className="flex-grow">
                 <div className="flex justify-center">
