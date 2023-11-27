@@ -8,7 +8,7 @@ use thiserror::Error;
 // Import the command macro for Tauri.
 use serde::ser::Error as SerdeError;
 use serde::Serialize; // Add this to bring the `Error` trait into scope.
-use tauri::{Manager, Builder, WindowBuilder, WindowUrl};
+use tauri::{Builder, Manager, WindowBuilder, WindowUrl};
 
 #[derive(Debug, Serialize)]
 struct ModelList {
@@ -90,7 +90,6 @@ fn get_ollama_models() -> Result<ModelList, ApiError> {
 
     Ok(ModelList { models })
 }
-
 
 #[tauri::command]
 fn open_chat_window(app: tauri::AppHandle) {
