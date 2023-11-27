@@ -4,6 +4,8 @@ A native desktop app for [Ollama](https://ollama.ai) built with [Tauri](https://
 
 _🐉 Here be dragons! This project is in early stages of development_
 
+![screenshot-v0 0 1-alpha2](https://github.com/ai-qol-things/rusty-ollama/assets/862951/8bd141ce-a804-4d55-9e1b-7f58d9e89fa0)
+
 ## Install
 
 Clone and at the root run
