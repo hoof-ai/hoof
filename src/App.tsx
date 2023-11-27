@@ -13,12 +13,10 @@ const App: React.FC = () => {
     }, []);
 
     return (
-        <div className="app bg-gray-900 text-white h-screen overflow-hidden flex flex-col">
+        <div className="app bg-gray-900 text-white flex flex-col h-[100vh] p-5 box-border space-y-5">
             <TopBar/>
-            <div className="flex flex-grow flex-col">
-                <PromptTextArea/>
-                <ResponseArea/>
-            </div>
+            <PromptTextArea/>
+            <ResponseArea/>
         </div>
     );
 };
