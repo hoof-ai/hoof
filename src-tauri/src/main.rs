@@ -8,6 +8,7 @@ use thiserror::Error;
 // Import the command macro for Tauri.
 use serde::ser::Error as SerdeError;
 use serde::Serialize; // Add this to bring the `Error` trait into scope.
+use tauri::{Builder, Manager, WindowBuilder, WindowUrl};
 
 #[derive(Debug, Serialize)]
 struct ModelList {
@@ -90,16 +91,48 @@ fn get_ollama_models() -> Result<ModelList, ApiError> {
     Ok(ModelList { models })
 }
 
+#[tauri::command]
+fn open_chat_window(app: tauri::AppHandle) {
+    if app.get_window("chat").is_none() {
+        WindowBuilder::new(&app, "chat", WindowUrl::App("chat.html".into()))
+            .title("Chat")
+            .visible(false) // Start with window not visible
+            .build()
+            .expect("Failed to build window");
+    } else {
+        // Optionally, bring the existing window to the front
+        let window = app.get_window("chat").unwrap();
+        window.set_focus().unwrap();
+    }
+}
+
+#[tauri::command]
+fn open_settings_window(app: tauri::AppHandle) {
+    if app.get_window("settings").is_none() {
+        WindowBuilder::new(&app, "settings", WindowUrl::App("settings.html".into()))
+            .title("Settings")
+            .visible(false) // Start with window not visible
+            .build()
+            .expect("Failed to build window");
+    } else {
+        // Optionally, bring the existing window to the front
+        let window = app.get_window("settings").unwrap();
+        window.set_focus().unwrap();
+    }
+}
+
 mod spotlight;
 
 fn main() {
-    tauri::Builder::default()
+    Builder::default()
         .invoke_handler(tauri::generate_handler![
             spotlight::init_spotlight_window,
             spotlight::show_spotlight,
             spotlight::hide_spotlight,
             askollama,
-            get_ollama_models
+            get_ollama_models,
+            open_chat_window,
+            open_settings_window
         ])
         .manage(spotlight::State::default())
         .setup(move |app| {

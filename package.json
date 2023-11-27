@@ -25,6 +25,7 @@
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.10",
     "@tauri-apps/cli": "^1.5.0",
+    "@types/node": "^20.10.0",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@types/react-syntax-highlighter": "^15.5.10",
