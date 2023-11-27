@@ -13,7 +13,7 @@ const ModelSelect: React.FC<ModelSelectProps> = ({}) => {
     };
 
     return (
-        <Listbox as="div" className="relative w-48" value={selectedModel} onChange={handleChange}>
+        <Listbox as="div" className="relative w-80" value={selectedModel} onChange={handleChange}>
             <div className="mt-1">
                 <Listbox.Button className="flex justify-between w-full text-white bg-transparent border border-white border-opacity-50 pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-white focus:border-white sm:text-sm">
                     <span className="block truncate">{selectedModel}</span>

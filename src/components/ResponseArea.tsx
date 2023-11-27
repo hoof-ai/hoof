@@ -10,7 +10,7 @@ interface ResponseAreaProps {
 
 const ResponseArea = ({}: ResponseAreaProps) => {
     const {currentResponse, queryState} = useQuery();
-    const classNames = clsx('flex-grow min-h-[100px] p-5', {
+    const classNames = clsx('flex-grow overflow-y-auto', {
         'flex items-center justify-center': queryState === 'asking' || queryState === 'error'
     });
     return (
@@ -34,7 +34,7 @@ const ResponseArea = ({}: ResponseAreaProps) => {
                         }
                         {
                             queryState === 'postQuery' && currentResponse && (
-                                <div className="overflow-y-scroll p-4 bg-gray-200">
+                                <div className="p-4 bg-gray-200">
                                     <ResponseText response={currentResponse}/>
                                 </div>
                             )
