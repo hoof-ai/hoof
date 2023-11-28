@@ -97,7 +97,7 @@ jobs:
       uses: dtolnay/rust-toolchain@nightly
       if: matrix.os == 'macOS'
       with:
-        targets: universal-apple-darwin, aarch64-apple-darwin, x86_64-apple-darwin
+        targets: aarch64-apple-darwin, x86_64-apple-darwin
         toolchain: nightly
 
 
