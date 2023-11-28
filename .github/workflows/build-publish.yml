@@ -99,8 +99,8 @@ jobs:
       with:
         targets: universal-apple-darwin, aarch64-apple-darwin, x86_64-apple-darwin
 
-    - name: install Rust stable
-      uses: dtolnay/rust-toolchain@stable
+    - name: install Rust
+      uses: dtolnay/rust-toolchain@nightly
       if: matrix.os != 'macOS'
 
     - name: Cache
