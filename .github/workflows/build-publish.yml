@@ -48,47 +48,52 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const tagName = `v${process.env.PACKAGE_VERSION}`;
-            let release;
+            // Do nothing if we're not on main branch
+            if (${{ contains(github.ref, 'refs/heads/main') }}) {
 
-            // Try to get the release by tag name
-            try {
-              release = await github.rest.repos.getReleaseByTag({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                tag: tagName,
-              });
-            } catch (error) {
-              if (error.status !== 404) {
-                throw error; // Re-throw if it's not a 'not found' error
+              const tagName = `v${process.env.PACKAGE_VERSION}`;
+              let release;
+
+              // Try to get the release by tag name
+              try {
+                release = await github.rest.repos.getReleaseByTag({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  tag: tagName,
+                });
+              } catch (error) {
+                if (error.status !== 404) {
+                  throw error; // Re-throw if it's not a 'not found' error
+                }
               }
-            }
 
-            // If release exists, update it; otherwise, create a new release
-            if (release && release.data) {
-              const updateResponse = await github.rest.repos.updateRelease({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                release_id: release.data.id,
-                tag_name: tagName,
-                name: `Rusty Llama ${tagName}`,
-                body: 'Rusty Llama - A Spotlight like Ollama GUI.',
-                draft: ${{ ! contains(github.ref, 'refs/heads/main') }},
-                prerelease: false
-              });
-              return updateResponse.data.id;
-            } else {
-              const createResponse = await github.rest.repos.createRelease({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                tag_name: tagName,
-                name: `Rusty Llama ${tagName}`,
-                body: 'Rusty Llama - A Spotlight like Ollama GUI.',
-                draft: ${{ ! contains(github.ref, 'refs/heads/main') }},
-                generate_release_notes: true,
-                prerelease: false
-              });
-              return createResponse.data.id;
+              // If release exists, update it; otherwise, create a new release
+              if (release && release.data) {
+                const updateResponse = await github.rest.repos.updateRelease({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  release_id: release.data.id,
+                  tag_name: tagName,
+                  name: `Rusty Llama ${tagName}`,
+                  body: 'Rusty Llama - A Spotlight like Ollama GUI.',
+                  draft: ${{ ! contains(github.ref, 'refs/heads/main') }},
+                  generate_release_notes: true,
+                  prerelease: false
+                });
+                return updateResponse.data.id;
+              } else {
+                const createResponse = await github.rest.repos.createRelease({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  tag_name: tagName,
+                  name: `Rusty Llama ${tagName}`,
+                  body: 'Rusty Llama - A Spotlight like Ollama GUI.',
+                  draft: ${{ ! contains(github.ref, 'refs/heads/main') }},
+                  generate_release_notes: true,
+                  prerelease: false
+                });
+                return createResponse.data.id;
+              }
             }
 
   build:
