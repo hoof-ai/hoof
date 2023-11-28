@@ -137,6 +137,7 @@ jobs:
     steps:
       - name: publish release
         id: publish-release
+        if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/github-script@v6
         env:
           release_id: ${{ needs.create-release.outputs.release_id }}
