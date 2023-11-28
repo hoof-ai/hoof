@@ -98,10 +98,13 @@ jobs:
       if: matrix.os == 'macOS'
       with:
         targets: universal-apple-darwin, aarch64-apple-darwin, x86_64-apple-darwin
+        toolchain: nightly
 
     - name: install Rust
-      uses: dtolnay/rust-toolchain@nightly
+      uses: dtolnay/rust-toolchain@stable
       if: matrix.os != 'macOS'
+      with:
+        toolchain: nightly
 
     - name: Cache
       uses: Swatinem/rust-cache@v2
