@@ -36,7 +36,6 @@ const Settings = () => {
 
 
         // Function to load settings from the config file
-        // Use getConfigPath where you need the config path
         async function loadSettings() {
         try {
             const configPath = await getConfigPath();
@@ -116,7 +115,6 @@ const Settings = () => {
         </div>
     );
 };
-
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
