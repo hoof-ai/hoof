@@ -75,7 +75,7 @@ async fn askollama(question: String, models: String) -> Result<String, ApiError>
     Ok(final_response)
 }
 
-/// Retrieves the list of models from Ollama API/// Retrieves the list of models from Ollama API
+/// Retrieves the list of models from Ollama API
 #[command]
 async fn get_ollama_models() -> Result<ModelList, ApiError> {
     let url = "http://localhost:11434/api/tags";
