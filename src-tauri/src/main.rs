@@ -2,11 +2,11 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use reqwest::Client;
+use serde::{Deserialize, Serialize}; // Add this to bring the `Error` trait into scope.
 use serde_json::{json, Value};
 use tauri::command;
-use thiserror::Error;
-use serde::{Deserialize, Serialize}; // Add this to bring the `Error` trait into scope.
 use tauri::{Builder, Manager, WindowBuilder, WindowUrl};
+use thiserror::Error;
 
 #[derive(Debug, Serialize)]
 struct ModelList {
@@ -89,9 +89,15 @@ async fn get_ollama_models() -> Result<ModelList, ApiError> {
         .await
         .map_err(ApiError::Network)?; // Change this line
 
-    let model_names = models_response.models.into_iter().map(|model| model.name).collect();
+    let model_names = models_response
+        .models
+        .into_iter()
+        .map(|model| model.name)
+        .collect();
 
-    Ok(ModelList { models: model_names })
+    Ok(ModelList {
+        models: model_names,
+    })
 }
 
 #[tauri::command]
