@@ -6,7 +6,7 @@ use serde_json::{json, Value};
 use tauri::command;
 use thiserror::Error;
 // Import the command macro for Tauri.
-use serde::{ser::Error as SerdeError, Deserialize};
+use serde::ser::Error as SerdeError;
 use serde::Serialize; // Add this to bring the `Error` trait into scope.
 use tauri::{Builder, Manager, WindowBuilder, WindowUrl};
 
