@@ -53,7 +53,7 @@ jobs:
               tag_name: `RustyLlama-v${process.env.PACKAGE_VERSION}`,
               name: `Rusty Llama v${process.env.PACKAGE_VERSION}`,
               body: 'Take a look at the assets to download and install this app.',
-              draft: ${{ ! contains(github.ref, 'refs/heads/main') }}
+              draft: ${{ ! contains(github.ref, 'refs/heads/main') }},
               prerelease: false
             })
             return data.id
