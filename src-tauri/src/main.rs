@@ -2,12 +2,12 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use reqwest::Client;
-use serde_json::{json, Value};
-use tauri::command;
-use thiserror::Error;
 use serde::ser::Error as SerdeError;
 use serde::Serialize; // Add this to bring the `Error` trait into scope.
+use serde_json::{json, Value};
+use tauri::command;
 use tauri::{Builder, Manager, WindowBuilder, WindowUrl};
+use thiserror::Error;
 
 #[derive(Debug, Serialize)]
 struct ModelList {
