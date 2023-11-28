@@ -93,15 +93,16 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
 
-    - name: install Rust stable
-      uses: dtolnay/rust-toolchain@stable
+    - name: install Rust
+      uses: dtolnay/rust-toolchain@nightly
       if: matrix.os == 'macOS'
       with:
         targets: universal-apple-darwin, aarch64-apple-darwin, x86_64-apple-darwin
         toolchain: nightly
 
+
     - name: install Rust
-      uses: dtolnay/rust-toolchain@stable
+      uses: dtolnay/rust-toolchain@nightly
       if: matrix.os != 'macOS'
       with:
         toolchain: nightly
