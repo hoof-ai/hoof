@@ -48,6 +48,11 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
+            // Do nothing if we're not on main branch
+            if (github.context.ref !== 'refs/heads/main') {
+              return;
+            }
+
             const tagName = `v${process.env.PACKAGE_VERSION}`;
             let release;
 
@@ -74,6 +79,7 @@ jobs:
                 name: `Rusty Llama ${tagName}`,
                 body: 'Rusty Llama - A Spotlight like Ollama GUI.',
                 draft: ${{ ! contains(github.ref, 'refs/heads/main') }},
+                generate_release_notes: true,
                 prerelease: false
               });
               return updateResponse.data.id;
