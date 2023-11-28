@@ -97,7 +97,7 @@ jobs:
       uses: dtolnay/rust-toolchain@stable
       if: matrix.os == 'macOS'
       with:
-        targets: x86_64-apple-darwin aarch64-apple-darwin
+        targets: universal-apple-darwin
 
     - name: install Rust stable
       uses: dtolnay/rust-toolchain@stable
