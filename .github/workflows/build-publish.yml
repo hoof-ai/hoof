@@ -89,73 +89,56 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
-        releaseName: 'App v__VERSION__'
+        tagName: RustyLlama-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
+        releaseName: 'RustyLlama v__VERSION__'
         releaseBody: 'See the assets to download this version and install.'
-        releaseDraft: true
-        prerelease: false
+        releaseDraft: ! contains(github.ref, 'refs/heads/main') # only create a draft release if not on main
+        prerelease: ! contains(github.ref, 'refs/heads/main') # only create a prerelease if not on main
+        includeRelease: true
 
     - name: Upload Binary
       uses: actions/upload-artifact@v3
       with:
         name: cargo-tauri
-        path: ./src-tauri/target/release/bundle/*/*.dmg
+        path: ./src-tauri/target/release/bundle/dmg/macos/*.dmg
         if-no-files-found: error
 
-  create-release:
-    if: github.ref == 'refs/heads/main' # Dont run on PR branches
-    permissions:
-      contents: write
-    runs-on: ubuntu-latest
-    needs:
-      - build
-    outputs:
-      release_id: ${{ steps.create-release.outputs.result }}
+    - name: get version
+      run: echo PACKAGE_VERSION="$(node -p "require('./package.json').version")" >> "$GITHUB_ENV"
 
-    steps:
-      - uses: actions/checkout@v4
+    # Check if release / tag already exists, if it does add a suffix to the version
+    - name: check if release exists
+      id: check-release
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const { data: releases } = await github.rest.repos.listReleases({
+            owner: context.repo.owner,
+            repo: context.repo.repo
+          })
+          const release = releases.find(r => r.tag_name === `app-v${process.env.PACKAGE_VERSION}`)
+          return release ? release.tag_name : null
 
-      - name: setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
+    - name: set version
+      if: steps.check-release.outputs.result != null
+      run: echo PACKAGE_VERSION="$(node -p "require('./package.json').version")-$(date +%Y%m%d%H%M%S)" >> "$GITHUB_ENV"
 
-      - name: get version
-        run: echo PACKAGE_VERSION="$(node -p "require('./package.json').version")" >> "$GITHUB_ENV"
-
-      # Check if release / tag already exists, if it does add a suffix to the version
-      - name: check if release exists
-        id: check-release
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const { data: releases } = await github.rest.repos.listReleases({
-              owner: context.repo.owner,
-              repo: context.repo.repo
-            })
-            const release = releases.find(r => r.tag_name === `app-v${process.env.PACKAGE_VERSION}`)
-            return release ? release.tag_name : null
-
-      - name: set version
-        if: steps.check-release.outputs.result != null
-        run: echo PACKAGE_VERSION="$(node -p "require('./package.json').version")-$(date +%Y%m%d%H%M%S)" >> "$GITHUB_ENV"
-
-      # Create release with the tag
-      - name: create release
-        id: create-release
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const { data } = await github.rest.repos.createRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              tag_name: `app-v${process.env.PACKAGE_VERSION}`,
-              name: `Desktop App v${process.env.PACKAGE_VERSION}`,
-              body: 'Take a look at the assets to download and install this app.',
-              draft: true,
-              prerelease: false
-            })
-            return data.id
+    # Create release with the tag
+    - name: create release
+      id: create-release
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const { data } = await github.rest.repos.createRelease({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            tag_name: ` RustyLlama-v${process.env.PACKAGE_VERSION}`,
+            name: `Rusty Llama v${process.env.PACKAGE_VERSION}`,
+            body: 'Take a look at the assets to download and install this app.',
+            draft: true,
+            prerelease: false
+          })
+          return data.id
 
   publish-release:
     if: github.ref == 'refs/heads/main' # Dont run on PR branches
@@ -163,7 +146,6 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     needs:
-      - create-release
       - build
     steps:
       - name: publish release
