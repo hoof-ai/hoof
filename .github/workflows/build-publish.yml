@@ -49,7 +49,7 @@ jobs:
         with:
           script: |
             // Do nothing if we're not on main branch
-            if (${{ contains(github.ref, 'refs/heads/main') }})
+            if (${{ contains(github.ref, 'refs/heads/main') }}) {
 
               const tagName = `v${process.env.PACKAGE_VERSION}`;
               let release;
