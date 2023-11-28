@@ -81,9 +81,6 @@ jobs:
         version: 8
         run_install: true
 
-    - name: Build with pnpm
-      run: pnpm build
-
     - name: Build with Tauri
       uses: tauri-apps/tauri-action@v0
       env:
@@ -99,8 +96,10 @@ jobs:
     - name: Upload Binary
       uses: actions/upload-artifact@v3
       with:
-        name: cargo-tauri
-        path: ./src-tauri/target/release/bundle/macos/*.dmg
+        name: RustyLlama
+        path: |
+          src-tauri/target/release/bundle/macos/*
+          src-tauri/target/release/bundle/dmg/*
         if-no-files-found: error
 
     # tag and release
