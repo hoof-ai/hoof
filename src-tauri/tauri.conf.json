@@ -24,6 +24,10 @@
       "shell": {
         "all": false,
         "open": true
+      },
+      "fs": {
+        "all": true,
+        "scope": []
       }
     },
     "bundle": {

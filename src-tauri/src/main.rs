@@ -6,7 +6,7 @@ use serde_json::{json, Value};
 use tauri::command;
 use thiserror::Error;
 // Import the command macro for Tauri.
-use serde::ser::Error as SerdeError;
+use serde::{ser::Error as SerdeError, Deserialize};
 use serde::Serialize; // Add this to bring the `Error` trait into scope.
 use tauri::{Builder, Manager, WindowBuilder, WindowUrl};
 
@@ -120,6 +120,50 @@ fn open_settings_window(app: tauri::AppHandle) {
         window.set_focus().unwrap();
     }
 }
+
+// Define a struct for the settings
+#[derive(Serialize, Deserialize)]
+struct Settings {
+    default_model: String,
+    hotkey: String,
+    open_on_active_display: bool,
+    pinning_mode: bool,
+    font_size: u8,
+    ollama_api_url: String,
+    auto_copy_selection: bool,
+    auto_copy_clipboard: bool,
+    unload_model_idle_minutes: Option<u8>,
+    streaming_output: bool,
+}
+
+// Tauri commands for getting and setting the settings
+#[tauri::command]
+fn get_settings() -> Result<Settings, String> {
+    // Logic to retrieve settings
+
+    // Return a dummy settings struct for now
+    Ok(Settings {
+        default_model: "davinci".to_string(),
+        hotkey: "ctrl+space".to_string(),
+        open_on_active_display: true,
+        pinning_mode: false,
+        font_size: 16,
+        ollama_api_url: "http://localhost:11434".to_string(),
+        auto_copy_selection: false,
+        auto_copy_clipboard: false,
+        unload_model_idle_minutes: None,
+        streaming_output: false,
+    })
+}
+
+#[tauri::command]
+fn set_settings(new_settings: Settings) -> Result<(), String> {
+    // Logic to save settings
+
+    // return the new settings
+    Ok(())
+}
+
 
 mod spotlight;
 
