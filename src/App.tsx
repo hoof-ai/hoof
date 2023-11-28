@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { invoke } from '@tauri-apps/api/tauri';
 import useEscape from "./hooks/useEscape.tsx";
 
@@ -32,6 +32,11 @@ function App() {
     invoke("init_spotlight_window");
   }, []);
 
+  async function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+        if (e.key === 'Enter') {
+            await askOllama();
+        }
+  }
 
   async function askOllama() {
     const response = await invoke<string>('askollama', {
@@ -55,6 +60,7 @@ function App() {
               id="question-input"
               type="text"
               value={question}
+              onKeyDown={handleKeyDown}
               onChange={(e) => setQuestion(e.target.value)}
               placeholder="Ask Ollama a question..."
               className="w-full px-4 py-2 transition-colors border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
