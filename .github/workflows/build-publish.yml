@@ -100,7 +100,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: cargo-tauri
-        path: ./src-tauri/target/release/bundle/dmg/macos/*.dmg
+        path: ./src-tauri/target/release/bundle/macos/*.dmg
         if-no-files-found: error
 
     # tag and release
