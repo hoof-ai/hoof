@@ -92,7 +92,7 @@ jobs:
         tagName: RustyLlama-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
         releaseName: 'RustyLlama v__VERSION__'
         releaseBody: 'See the assets to download this version and install.'
-        releaseDraft: ! contains(github.ref, 'refs/heads/main') # only create a draft release if not on main
+        releaseDraft: ${{ ! contains(github.ref, 'refs/heads/main') }} # only create a draft release if not on main
         prerelease: false
         includeRelease: true
 
@@ -110,7 +110,7 @@ jobs:
         bump_version_scheme: minor
         use_github_release_notes: true
         tag_prefix: "v"
-        dry_run: ! contains(github.ref, 'refs/heads/main') # only create a draft release if not on main
+        dry_run: ${{ ! contains(github.ref, 'refs/heads/main') }} # only create a draft release if not on main
 
     - name: Output Release Info
       run: |
