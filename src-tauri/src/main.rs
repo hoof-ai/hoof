@@ -6,7 +6,9 @@ use serde::ser::Error as SerdeError;
 use serde::Serialize; // Add this to bring the `Error` trait into scope.
 use serde_json::{json, Value};
 use tauri::command;
+use tauri::SystemTray;
 use tauri::{Builder, Manager, WindowBuilder, WindowUrl};
+use tauri::{CustomMenuItem, SystemTrayMenu};
 use thiserror::Error;
 
 #[derive(Debug, Serialize)]
@@ -123,7 +125,20 @@ fn open_settings_window(app: tauri::AppHandle) {
 mod spotlight;
 
 fn main() {
+    let quit = CustomMenuItem::new("quit".to_string(), "Quit");
+    let tray_menu = SystemTrayMenu::new().add_item(quit);
+    let system_tray = SystemTray::new().with_menu(tray_menu);
+
     Builder::default()
+        .system_tray(system_tray)
+        .on_system_tray_event(|app, event| match event {
+            tauri::SystemTrayEvent::MenuItemClick { id, .. } => {
+                if id == "quit" {
+                    app.exit(0);
+                }
+            }
+            _ => {}
+        })
         .invoke_handler(tauri::generate_handler![
             spotlight::init_spotlight_window,
             spotlight::show_spotlight,
