@@ -6,10 +6,10 @@ use serde::ser::Error as SerdeError;
 use serde::Serialize; // Add this to bring the `Error` trait into scope.
 use serde_json::{json, Value};
 use tauri::command;
-use tauri::{Builder, Manager, WindowBuilder, WindowUrl};
-use thiserror::Error;
 use tauri::SystemTray;
+use tauri::{Builder, Manager, WindowBuilder, WindowUrl};
 use tauri::{CustomMenuItem, SystemTrayMenu};
+use thiserror::Error;
 
 #[derive(Debug, Serialize)]
 struct ModelList {
@@ -126,8 +126,7 @@ mod spotlight;
 
 fn main() {
     let quit = CustomMenuItem::new("quit".to_string(), "Quit");
-    let tray_menu = SystemTrayMenu::new()
-        .add_item(quit);
+    let tray_menu = SystemTrayMenu::new().add_item(quit);
     let system_tray = SystemTray::new().with_menu(tray_menu);
 
     Builder::default()
