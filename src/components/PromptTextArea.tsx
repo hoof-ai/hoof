@@ -1,13 +1,27 @@
 import React, {KeyboardEvent} from 'react';
 import {useQuery} from "../hooks/useQuery.ts";
 import clsx from 'clsx';
+import { useVisibilityChange } from "@uidotdev/usehooks";
+import { readText } from '@tauri-apps/api/clipboard';
 
 interface PromptTextAreaProps {
 }
 
 const PromptTextArea: React.FC<PromptTextAreaProps> = ({}: PromptTextAreaProps) => {
     const { askOllama, setCurrentQuestion, currentQuestion, queryState } = useQuery();
+    const documentVisible = useVisibilityChange();
 
+    React.useEffect(() => {
+        if (documentVisible && currentQuestion === '') {
+            readText().then((text) => {
+                if (text) {
+                    setCurrentQuestion(text);
+                }
+            });
+        } else {
+            setCurrentQuestion('');
+        }
+    }, [documentVisible]);
 
     const handleKeyPress = async (event: KeyboardEvent<HTMLTextAreaElement>) => {
         if (event.key === 'Enter' && !event.shiftKey) {
