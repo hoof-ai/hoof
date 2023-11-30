@@ -8,6 +8,8 @@ use serde_json::{json, Value};
 use tauri::command;
 use tauri::{Builder, Manager, WindowBuilder, WindowUrl};
 use thiserror::Error;
+use tauri::SystemTray;
+use tauri::{CustomMenuItem, SystemTrayMenu};
 
 #[derive(Debug, Serialize)]
 struct ModelList {
@@ -123,7 +125,21 @@ fn open_settings_window(app: tauri::AppHandle) {
 mod spotlight;
 
 fn main() {
+    let quit = CustomMenuItem::new("quit".to_string(), "Quit");
+    let tray_menu = SystemTrayMenu::new()
+        .add_item(quit);
+    let system_tray = SystemTray::new().with_menu(tray_menu);
+
     Builder::default()
+        .system_tray(system_tray)
+        .on_system_tray_event(|app, event| match event {
+            tauri::SystemTrayEvent::MenuItemClick { id, .. } => {
+                if id == "quit" {
+                    app.exit(0);
+                }
+            }
+            _ => {}
+        })
         .invoke_handler(tauri::generate_handler![
             spotlight::init_spotlight_window,
             spotlight::show_spotlight,
