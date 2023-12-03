@@ -4,7 +4,7 @@
 use reqwest::Client;
 use serde::{Deserialize, Serialize}; // Add this to bring the `Error` trait into scope.
 use serde_json::{json, Value};
-use tauri::{command, CustomMenuItem, SystemTrayMenu, SystemTray};
+use tauri::{command, CustomMenuItem, SystemTray, SystemTrayMenu};
 use tauri::{Builder, Manager, WindowBuilder, WindowUrl};
 use thiserror::Error;
 
