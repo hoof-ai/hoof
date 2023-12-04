@@ -1,4 +1,4 @@
-import {useQuery} from "../hooks/useQuery.ts";
+import {useQuery} from "../../../hooks/useQuery.ts";
 import clsx from 'clsx';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';

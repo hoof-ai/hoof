@@ -1,5 +1,5 @@
 import React, {KeyboardEvent} from 'react';
-import {useQuery} from "../hooks/useQuery.ts";
+import {useQuery} from "../../../hooks/useQuery.ts";
 import clsx from 'clsx';
 import { useVisibilityChange } from "@uidotdev/usehooks";
 import { readText } from '@tauri-apps/api/clipboard';

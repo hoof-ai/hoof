@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
-import TopBar from './components/TopBar';
-import PromptTextArea from './components/PromptTextArea';
-import useEscape from "./hooks/useEscape.tsx";
+import TopBar from './components/TopBar.tsx';
+import PromptTextArea from './components/PromptTextArea.tsx';
+import useEscape from "../../hooks/useEscape.tsx";
 import {invoke} from "@tauri-apps/api/tauri";
 import ResponseArea from "./components/ResponseArea.tsx";
 

@@ -1,7 +1,7 @@
 import React, {Fragment} from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { ChevronUpDownIcon } from '@heroicons/react/24/outline';
-import {useModels} from "../hooks/useModels.ts";
+import {useModels} from "../../../hooks/useModels.ts";
 
 interface ModelSelectProps {}
 

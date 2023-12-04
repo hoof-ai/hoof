@@ -1,5 +1,5 @@
 import React from 'react';
-import ModelSelect from './ModelSelect';
+import ModelSelect from './ModelSelect.tsx';
 import { AdjustmentsVerticalIcon, ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline';
 import {invoke} from "@tauri-apps/api/tauri";
 

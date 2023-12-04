@@ -1,6 +1,7 @@
 import React, {useEffect} from "react";
 import ReactDOM from "react-dom/client";
 import "../../styles.css";
+import SettingsLayout from "./components/SettingsLayout.tsx";
 
 const Settings = () => {
     async function setupAppWindow() {
@@ -13,9 +14,7 @@ const Settings = () => {
     }, [])
 
     return (
-        <div>
-            <h1>Settings Window</h1>
-        </div>
+        <SettingsLayout/>
     )
 }
 
