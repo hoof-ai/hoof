@@ -1,11 +1,13 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use std::sync::Mutex;
 use reqwest::Client;
 use serde::{Deserialize, Serialize}; // Add this to bring the `Error` trait into scope.
 use serde_json::{json, Value};
 use tauri::{command, CustomMenuItem, SystemTray, SystemTrayMenu};
 use tauri::{Builder, Manager, WindowBuilder, WindowUrl};
+use tauri_plugin_store::StoreBuilder;
 use thiserror::Error;
 
 #[derive(Debug, Serialize)]
@@ -131,6 +133,7 @@ fn open_settings_window(app: tauri::AppHandle) {
 }
 
 mod spotlight;
+mod settings;
 
 fn main() {
     let quit = CustomMenuItem::new("quit".to_string(), "Quit");
@@ -138,6 +141,7 @@ fn main() {
     let system_tray = SystemTray::new().with_menu(tray_menu);
 
     Builder::default()
+        .plugin(tauri_plugin_store::Builder::default().build())
         .system_tray(system_tray)
         .on_system_tray_event(|app, event| match event {
             tauri::SystemTrayEvent::MenuItemClick { id, .. } => {
@@ -148,6 +152,9 @@ fn main() {
             _ => {}
         })
         .invoke_handler(tauri::generate_handler![
+            settings::get_default_settings,
+            settings::read_setting,
+            settings::write_setting,
             spotlight::init_spotlight_window,
             spotlight::show_spotlight,
             spotlight::hide_spotlight,
@@ -160,6 +167,8 @@ fn main() {
         .setup(move |app| {
             // Set activation policy to Accessory to prevent the app icon from showing on the dock
             app.set_activation_policy(tauri::ActivationPolicy::Accessory);
+            let store = Mutex::new(StoreBuilder::new(app.handle(), "my_store".parse()?).build());
+            app.manage(settings::SettingsStore { store });
             Ok(())
         })
         .run(tauri::generate_context!())

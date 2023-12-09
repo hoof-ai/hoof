@@ -1,7 +1,7 @@
 import React from "react";
 import {SettingInput, SettingToggle} from "./SettingsFields.tsx";
 
-const OllamaSettings: React.FC = () => {
+const SettingsPanel: React.FC = () => {
     return (
         <div className="flex-1 flex flex-col p-4">
             <div className="flex-1 flex flex-col justify-between">
@@ -18,4 +18,4 @@ const OllamaSettings: React.FC = () => {
     );
 };
 
-export default OllamaSettings;
+export default SettingsPanel;

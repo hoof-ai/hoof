@@ -36,7 +36,6 @@ export const useStore = create<State>((set, get) => ({
                 });
                 set({currentResponse: response});
                 set({queryState: 'postQuery'});
-                console.log('Ollama says:', response);
             } catch (e) {
                 console.error('Failed to ask Ollama:', e);
                 set({queryState: 'error'});

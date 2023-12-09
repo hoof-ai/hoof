@@ -1,11 +1,11 @@
 import React from "react";
 
-interface NavItemProps {
+interface SettingsGroupProps {
     title: string;
     subItems: string[];
 }
 
-const NavItem: React.FC<NavItemProps> = ({ title, subItems }) => {
+const SettingsGroup: React.FC<SettingsGroupProps> = ({ title, subItems }) => {
     return (
         <div>
             <div className="text-gray-300 font-bold text-lg">{title}</div>
@@ -16,4 +16,4 @@ const NavItem: React.FC<NavItemProps> = ({ title, subItems }) => {
     );
 };
 
-export default NavItem;
+export default SettingsGroup;

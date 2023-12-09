@@ -1,6 +1,6 @@
 import React from "react";
 
-const SearchBar: React.FC = () => {
+const SettingsSearchBox: React.FC = () => {
     return (
         <div className="w-60">
             <input
@@ -12,4 +12,4 @@ const SearchBar: React.FC = () => {
     );
 };
 
-export default SearchBar;
+export default SettingsSearchBox;

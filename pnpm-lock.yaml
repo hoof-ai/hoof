@@ -41,6 +41,9 @@ dependencies:
   remark-gfm:
     specifier: ^4.0.0
     version: 4.0.0
+  tauri-plugin-store-api:
+    specifier: github:tauri-apps/tauri-plugin-store#v1
+    version: github.com/tauri-apps/tauri-plugin-store/3367248b2661abcb73d2a89f30df780c387fb57d
   zustand:
     specifier: ^4.4.6
     version: 4.4.6(@types/react@18.2.39)(react@18.2.0)
@@ -2712,4 +2715,12 @@ packages:
 
   /zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
+    dev: false
+
+  github.com/tauri-apps/tauri-plugin-store/3367248b2661abcb73d2a89f30df780c387fb57d:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/3367248b2661abcb73d2a89f30df780c387fb57d}
+    name: tauri-plugin-store-api
+    version: 0.0.0
+    dependencies:
+      '@tauri-apps/api': 1.5.1
     dev: false

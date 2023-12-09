@@ -1,12 +1,12 @@
 import React from 'react';
-import Navigation from "./Navigation.tsx";
-import OllamaSettings from "./OllamaSettings.tsx";
+import SettingsList from "./SettingsList.tsx";
+import SettingsPanel from "./SettingsPanel.tsx";
 
 const SettingsLayout: React.FC = () => {
     return (
-        <div className="flex h-screen bg-gray-800">
-            <Navigation />
-            <OllamaSettings />
+        <div className="flex h-screen bg-gray-700">
+            <SettingsList />
+            <SettingsPanel />
         </div>
     );
 };
