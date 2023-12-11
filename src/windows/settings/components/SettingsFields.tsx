@@ -7,6 +7,7 @@ interface SettingInputProps {
 
 interface SettingToggleProps {
     label: string;
+    checked?: boolean;
 }
 
 export const SettingInput: React.FC<SettingInputProps> = ({ label, defaultValue }) => {
@@ -18,12 +19,12 @@ export const SettingInput: React.FC<SettingInputProps> = ({ label, defaultValue 
     );
 };
 
-export const SettingToggle: React.FC<SettingToggleProps> = ({ label }) => {
+export const SettingToggle: React.FC<SettingToggleProps> = ({ label, checked }) => {
     return (
         <div className="flex items-center mb-3">
             <label className="text-gray-300 w-1/3">{label}</label>
             <div className="w-2/3">
-                <input type="checkbox" className="toggle toggle-accent" />
+                <input type="checkbox" className="toggle toggle-accent" checked={checked} />
             </div>
         </div>
     );

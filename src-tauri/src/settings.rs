@@ -205,3 +205,47 @@ pub fn get_settings_summary() -> Vec<CategorySummary> {
     }).collect()
 }
 
+#[derive(Serialize)]
+pub struct SettingInfo {
+    pub name: String,
+    pub value: SettingValue
+}
+
+#[command]
+pub fn get_section_settings(
+    state: State<SettingsStore>,
+    category: String,
+    section: String,
+) -> Result<Vec<SettingInfo>, String> {
+    let key = format!("{}.{}", category, section);
+    let store = state.store.lock().map_err(|e| e.to_string())?;
+
+    // Retrieve the stored settings for the section if they exist
+    let stored_settings: Option<Vec<Setting>> = store.get(&key)
+        .and_then(|value| serde_json::from_value(value.clone()).ok());
+
+    // Retrieve the default settings for the section
+    let default_settings = get_default_settings_list()
+        .into_iter()
+        .find(|c| c.name == category)
+        .and_then(|c| c.sections.into_iter().find(|s| s.name == section))
+        .ok_or_else(|| "Section not found".to_string())?
+        .settings;
+
+    // Merge the stored settings with the default settings
+    let settings_info = default_settings.into_iter().map(|default_setting| {
+        let value = stored_settings
+            .as_ref()
+            .and_then(|stored|
+                stored.iter().find(|s| s.name == default_setting.name)
+                    .map(|s| s.value.clone()))
+            .unwrap_or(default_setting.value);
+
+        SettingInfo {
+            name: default_setting.name,
+            value
+        }
+    }).collect();
+
+    Ok(settings_info)
+}

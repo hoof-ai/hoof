@@ -156,6 +156,7 @@ fn main() {
             settings::read_setting,
             settings::write_setting,
             settings::get_settings_summary,
+            settings::get_section_settings,
             spotlight::init_spotlight_window,
             spotlight::show_spotlight,
             spotlight::hide_spotlight,
