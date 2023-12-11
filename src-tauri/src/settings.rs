@@ -80,6 +80,47 @@ fn get_default_settings_list() -> SettingsList {
                 },
             ],
         },
+        SettingsCategory {
+            name: "Stuff".to_string(),
+            sections: vec![
+                SettingsSection {
+                    name: "Stuff 1".to_string(),
+                    settings: vec![
+                        Setting {
+                            name: "Name".to_string(),
+                            value: SettingValue::String("Anonymous".to_string()),
+                        },
+                        Setting {
+                            name: "Email".to_string(),
+                            value: SettingValue::String("bob@example.com".to_string()),
+                        },
+                    ],
+                },
+                SettingsSection {
+                    name: "Stuff 2".to_string(),
+                    settings: vec![
+                        Setting {
+                            name: "Theme".to_string(),
+                            value: SettingValue::String("Dark".to_string()),
+                        },
+                        Setting {
+                            name: "Language".to_string(),
+                            value: SettingValue::String("English".to_string()),
+                        },
+                        // Example of a boolean setting
+                        Setting {
+                            name: "Notifications".to_string(),
+                            value: SettingValue::Boolean(true),
+                        },
+                        // Example of a numeric setting
+                        Setting {
+                            name: "FontSize".to_string(),
+                            value: SettingValue::Number(12),
+                        },
+                    ],
+                },
+            ],
+        }
     ]
 }
 
@@ -146,3 +187,21 @@ pub fn write_setting(
     let mut store = state.store.lock().map_err(|e| e.to_string())?;
     store.insert(key, value).map_err(|e| e.to_string())
 }
+
+#[derive(Serialize)]
+pub struct CategorySummary {
+    pub name: String,
+    pub sections: Vec<String>,
+}
+
+#[command]
+pub fn get_settings_summary() -> Vec<CategorySummary> {
+    let settings_list = get_default_settings_list();
+    settings_list.into_iter().map(|category| {
+        CategorySummary {
+            name: category.name,
+            sections: category.sections.into_iter().map(|s| s.name).collect(),
+        }
+    }).collect()
+}
+
