@@ -1,10 +1,10 @@
 [package]
-name = "rusty_ollama"
+name = "hoof"
 version = "0.0.1"
 description = "A Ollama client written in Rust"
 authors = ["Dax911", "sammcj", "simoncollins"]
 license = "MIT"
-repository = "https://github.com/ai-qol-things/rusty-ollama/"
+repository = "https://github.com/hoof-ai/hoof/"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

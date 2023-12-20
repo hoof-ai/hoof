@@ -74,8 +74,8 @@ jobs:
                   repo: context.repo.repo,
                   release_id: release.data.id,
                   tag_name: tagName,
-                  name: `Rusty Llama ${tagName}`,
-                  body: 'Rusty Llama - A Spotlight like Ollama GUI.',
+                  name: `Hoof ${tagName}`,
+                  body: 'Hoof - A Spotlight like Ollama GUI.',
                   draft: ${{ ! contains(github.ref, 'refs/heads/main') }},
                   generate_release_notes: true,
                   prerelease: false
@@ -86,8 +86,8 @@ jobs:
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   tag_name: tagName,
-                  name: `Rusty Llama ${tagName}`,
-                  body: 'Rusty Llama - A Spotlight like Ollama GUI.',
+                  name: `Hoof ${tagName}`,
+                  body: 'Hoof - A Spotlight like Ollama GUI.',
                   draft: ${{ ! contains(github.ref, 'refs/heads/main') }},
                   generate_release_notes: true,
                   prerelease: false
