@@ -68,6 +68,7 @@
     ],
     "systemTray": {
       "iconPath": "icons/logo-tray.ico",
+      "title": "hoof",
       "iconAsTemplate": false
     }
   }
