@@ -1,6 +1,6 @@
 # Hoof
 
-![](icons/../src-tauri/icons/logo.png)
+![](logo.png)
 
 A spotlight like interface for interacting with local LLM / AI with [Ollama](https://ollama.ai).
 

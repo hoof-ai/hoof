@@ -1,6 +1,4 @@
 {
-
-
   "build": {
     "beforeDevCommand": "pnpm dev",
     "beforeBuildCommand": "pnpm build",
@@ -10,7 +8,7 @@
   },
   "package": {
     "productName": "hoof",
-    "version": "0.0.1"
+    "version": "0.0.4"
   },
   "tauri": {
     "allowlist": {
@@ -47,7 +45,7 @@
       "icon": [
         "icons/310x310.png",
         "icons/128x128.png",
-        "icons/logo.png",
+        "logo.png",
         "icons/logo.icns",
         "icons/logo.ico"
       ]
@@ -60,7 +58,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "tauri-app",
+        "title": "hoof",
         "width": 1024,
         "height": 650,
         "decorations": false,
@@ -69,8 +67,8 @@
       }
     ],
     "systemTray": {
-      "iconPath": "icons/logo.ico",
-      "iconAsTemplate": true
+      "iconPath": "icons/logo-tray.ico",
+      "iconAsTemplate": false
     }
   }
 }
