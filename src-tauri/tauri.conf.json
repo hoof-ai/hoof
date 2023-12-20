@@ -45,7 +45,7 @@
       "icon": [
         "icons/310x310.png",
         "icons/128x128.png",
-        "logo.png",
+        "icons/logo.png",
         "icons/logo.icns",
         "icons/logo.ico"
       ]
@@ -67,7 +67,7 @@
       }
     ],
     "systemTray": {
-      "iconPath": "icons/logo-tray.ico",
+      "iconPath": "icons/logo-tray.png",
       "title": "hoof",
       "iconAsTemplate": false
     }
