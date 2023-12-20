@@ -1,6 +1,4 @@
 {
-
-
   "build": {
     "beforeDevCommand": "pnpm dev",
     "beforeBuildCommand": "pnpm build",
@@ -9,8 +7,8 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "rusty_ollama",
-    "version": "0.0.1"
+    "productName": "hoof",
+    "version": "0.0.4"
   },
   "tauri": {
     "allowlist": {
@@ -29,7 +27,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.rusty.ollama",
+      "identifier": "com.hoof.app",
       "macOS": {
         "entitlements": null,
         "exceptionDomain": "",
@@ -45,11 +43,11 @@
         "timestampUrl": ""
       },
       "icon": [
-        "icons/32x32.png",
+        "icons/310x310.png",
         "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
+        "icons/logo.png",
+        "icons/logo.icns",
+        "icons/logo.ico"
       ]
     },
 
@@ -60,17 +58,18 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "tauri-app",
-        "width": 800,
-        "height": 600,
+        "title": "hoof",
+        "width": 1024,
+        "height": 650,
         "decorations": false,
         "center": true,
         "visible": false
       }
     ],
     "systemTray": {
-      "iconPath": "icons/icon.png",
-      "iconAsTemplate": true
+      "iconPath": "icons/logo-tray.png",
+      "title": "hoof",
+      "iconAsTemplate": false
     }
   }
 }

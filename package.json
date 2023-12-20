@@ -1,42 +1,43 @@
 {
-  "name": "tauri-app",
+  "name": "hoof",
   "private": true,
-  "version": "0.0.2",
+  "version": "0.0.4",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "bundle-dmg": "tauri build --target universal-apple-darwin"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
-    "@heroicons/react": "^2.0.18",
-    "@tauri-apps/api": "^1.5.1",
+    "@heroicons/react": "^2.1.1",
+    "@tauri-apps/api": "^1.5.2",
     "@uidotdev/usehooks": "^2.4.1",
     "clsx": "^2.0.0",
-    "geist": "^1.1.0",
-    "pnpm": "8.11.0",
+    "geist": "^1.2.0",
+    "pnpm": "8.13.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-markdown": "^9.0.1",
     "react-syntax-highlighter": "^15.5.0",
     "remark-gfm": "^4.0.0",
     "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#v1",
-    "zustand": "^4.4.6"
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.10",
-    "@tauri-apps/cli": "^1.5.6",
-    "@types/node": "^20.10.0",
-    "@types/react": "^18.2.39",
-    "@types/react-dom": "^18.2.17",
-    "@types/react-syntax-highlighter": "^15.5.10",
-    "@vitejs/plugin-react": "^4.2.0",
+    "@tauri-apps/cli": "^1.5.8",
+    "@types/node": "^20.10.5",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "@types/react-syntax-highlighter": "^15.5.11",
+    "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.31",
-    "tailwindcss": "^3.3.5",
-    "typescript": "^5.3.2",
-    "vite": "^5.0.2"
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.10"
   }
 }

@@ -1481,6 +1481,26 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
 
 [[package]]
+name = "hoof"
+version = "0.0.4"
+dependencies = [
+ "cocoa 0.25.0",
+ "core-foundation",
+ "core-graphics 0.23.1",
+ "objc",
+ "objc-foundation",
+ "objc_id",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-store",
+ "thiserror",
+ "tokio",
+]
+
+[[package]]
 name = "html5ever"
 version = "0.25.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2977,26 +2997,6 @@ name = "rustversion"
 version = "1.0.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7ffc183a10b4478d04cbbbfc96d0873219d962dd5accaff2ffbd4ceb7df837f4"
-
-[[package]]
-name = "rusty_ollama"
-version = "0.0.1"
-dependencies = [
- "cocoa 0.25.0",
- "core-foundation",
- "core-graphics 0.23.1",
- "objc",
- "objc-foundation",
- "objc_id",
- "reqwest",
- "serde",
- "serde_json",
- "tauri",
- "tauri-build",
- "tauri-plugin-store",
- "thiserror",
- "tokio",
-]
 
 [[package]]
 name = "ryu"
