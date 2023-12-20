@@ -1,6 +1,6 @@
 [package]
 name = "hoof"
-version = "0.0.1"
+version = "0.0.4"
 description = "A Ollama client written in Rust"
 authors = ["Dax911", "sammcj", "simoncollins"]
 license = "MIT"
