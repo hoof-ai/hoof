@@ -41,3 +41,60 @@ code {
     transform: rotate(360deg);
   }
 }
+/* General styles */
+.settings-container {
+  background-color: #2a2a2a;
+  /* Background color from the main app */
+  color: #fff;
+  /* Text color from the main app */
+  font-family: 'Your Font', sans-serif;
+  /* Font from the main app */
+  padding: 20px;
+  border-radius: 8px;
+  /* If your app uses rounded corners */
+}
+
+.settings-title {
+  font-size: 24px;
+  /* Match font size from the main app */
+  margin-bottom: 20px;
+}
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* Spacing between form items */
+}
+
+.settings-group label {
+  font-size: 18px;
+  /* Match label font size from the main app */
+}
+
+.settings-group input[type="text"] {
+  background-color: #404040;
+  /* Input background from the main app */
+  color: #fff;
+  /* Input text color from the main app */
+  border: 1px solid #555;
+  /* Border color from the main app */
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.settings-actions button {
+  background-color: #4CAF50;
+  /* Button color from the main app */
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  /* If your app uses transitions */
+}
+
+.settings-actions button:hover {
+  background-color: #66BB6A;
+  /* Hover effect color from the main app */
+}
